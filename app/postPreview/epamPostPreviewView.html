@@ -1,0 +1,14 @@
+<div ng-controller="postPreviewController as ppCtrl">
+  <div class="section-1">
+    <span class="title">{{ppCtrl.post_.title}}</span>
+    <div class="action-buttons" ng-show="ppCtrl.post_.authorId == ppCtrl.currentUser_.id">
+      <span class="edit-button">Edit</span>
+      &nbsp;|&nbsp;
+      <span class="delete-button" ng-click="ppCtrl.removePost($event)">Delete</span>
+    </div>
+  </div>
+  <div class="section-2">
+    <span class="author">by {{ppCtrl.post_.authorName}}</span>
+    <span class="comments">Comments: {{ppCtrl.post_.comments.length}}</span>
+  </div>
+</div>

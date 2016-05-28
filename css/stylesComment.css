@@ -1,0 +1,29 @@
+div.post div.section-2 span.comments{
+  float: right;
+}
+
+div.comment{
+  background-color: white;
+  border-radius: 15px;
+  border-style: solid;
+  height: 50px;
+  margin: 30px 0px 30px 5px;
+  padding: 5px 10px;
+  width: 40%;
+}
+
+div.comment div.body{
+  display: inline-block;
+  height: 100%;
+  overflow-y: scroll;
+  width: 70%;
+}
+
+div.comment div.author{
+  color: #0404b4;
+  display: inline-block;
+  float: right;
+  height: 40%;
+  overflow-y: scroll;
+  width: 20%;
+}

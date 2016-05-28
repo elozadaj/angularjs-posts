@@ -1,0 +1,11 @@
+<div class="addPost" ng-controller="addPostController as apCtrl">
+  <div class="header">Add new post</div>
+  <div class="content">
+    <div class="title"><input type="text" name="postTitle" ng-model="apCtrl.postTitle"></div>
+  	<div class="body"><textarea rows="5" cols="50" name="postBody" ng-model="apCtrl.postBody"></textarea></div>
+  </div>
+  <div class="footer">
+  	<button name="addPost" ng-click="apCtrl.addPost()">Add post</button>
+  	<button name="return" ng-click="apCtrl.closeAddPost()">Return to post list</button>
+  </div>
+</div>

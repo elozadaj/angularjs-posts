@@ -1,0 +1,11 @@
+<div class="comment" ng-controller="commentController as cCtrl">
+  <div class="body">
+    {{cCtrl.comment_.body}}
+  </div>
+  <div class="action-buttons" ng-show="cCtrl.comment_.authorId == cCtrl.currentUser_.id">
+    <span class="edit-button">Edit</span>
+    &nbsp;|&nbsp;
+    <span class="delete-button">Delete</span>
+  </div>
+  <div class="author">by {{cCtrl.comment_.name}}</div>   
+</div>

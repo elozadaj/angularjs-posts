@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <!-- importing css files -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/stylesListOfPosts.css">
+    <link rel="stylesheet" href="/css/stylesPostPreview.css">
+    <link rel="stylesheet" href="/css/stylesFullPost.css">
+    <link rel="stylesheet" href="/css/stylesComment.css">
+    <!-- importing javascript files -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+    <!-- ** importing angularJs files ** -->
+    <!-- listOfPostsController section -->
+    <script src="/app/listOfPosts/listOfPostsController.js"></script>
+    <script src="/app/listOfPosts/listOfPostsDirective.js"></script>
+    <link rel="import" href="/app/listOfPosts/epamListOfPostsView.html">
+    <!-- postPreview section -->
+    <script src="/app/postPreview/postPreviewController.js"></script>    
+    <script src="/app/postPreview/postPreviewDirective.js"></script>
+    <link rel="import" href="/app/postPreview/epamPostPreviewView.html">
+    <!-- fullPost section -->
+    <script src="/app/fullPost/fullPostController.js"></script>
+    <script src="/app/fullPost/fullPostDirective.js"></script>
+    <link rel="import" href="/app/fullPost/epamFullPostView.html">
+    <!-- comment section -->
+    <script src="/app/comment/commentController.js"></script>
+    <script src="/app/comment/commentDirective.js"></script>
+    <link rel="import" href="/app/comment/epamCommentView.html">
+    <!-- addPost section -->
+    <script src="/app/addPost/addPostController.js"></script>
+    <script src="/app/addPost/addPostDirective.js"></script>
+    <link rel="import" href="/app/addPost/epamAddPostView.html">
+    <!-- services section -->
+    <script src="/app/services/postService.js"></script>
+    <!-- importing main section-->
+    <script src="/app/mainController.js"></script>
+    <script src="/app/app.js"></script>
+    <title>Task 4</title>
+  </head>
+  <body ng-app="mainModule" ng-controller="mainController as mainCtrl">
+    <div id="header">
+  	  <img id="epam-image" src="img/epam.png" alt="EPAM image"/>
+  	  <div id="profile">
+        <span>User Profile: {{mainCtrl.currentUser.name}}</span>
+        <span>Email: {{mainCtrl.currentUser.email}}</span>
+	      <span>Posts: {{mainCtrl.currentUser.numberOfPosts}}</span>
+	      <span>Comments: {{}}</span>
+	    </div>
+    </div>
+    <div id="toolbox" ng-show="mainCtrl.postListIsVisible">
+      <div id="add-section"><button name="addPost" ng-click="mainCtrl.showAddPost()">Add</button></div>
+      <div id="filter-section">
+	    <input type="text" ng-model="mainCtrl.filterField" ng-change="mainCtrl.filterPost(mainCtrl.filterField)" title="Filter"/>&nbsp;Filter
+      </div>
+    </div>
+    <epam-list-of-posts posts="mainCtrl.posts" current-user="mainCtrl.currentUser" ng-show="mainCtrl.postListIsVisible"></epam-list-of-posts>
+    <epam-full-post post="mainCtrl.selectedPost" current-user="mainCtrl.currentUser" ng-show="mainCtrl.fullPostIsVisible"></epam-full-post>
+    <epam-add-post current-user="mainCtrl.currentUser" ng-show="mainCtrl.addPostIsVisible"></epam-add-post>
+  </body>
+</html>

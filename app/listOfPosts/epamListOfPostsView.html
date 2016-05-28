@@ -1,0 +1,5 @@
+<div id="posts-list" ng-controller="listOfPostsController as lopCtrl">
+  <div class="post" ng-repeat="p in lopCtrl.posts_" ng-click="lopCtrl.selectPost(p)">
+    <epam-post-preview post="p" current-user="lopCtrl.currentUser_"></epam-post-preview>
+  </div>
+</div>

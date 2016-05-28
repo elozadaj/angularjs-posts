@@ -1,0 +1,43 @@
+body{
+  height: 100%;
+  margin: 0 0 0 0;
+  width: 100%;
+}
+
+#header{
+  height: 100px;
+  width: 100%;
+}
+
+#header #epam-image{
+  width: 200px;
+}
+
+#header #profile{
+  display: inline-block;
+  float: right;
+  height: 100%;
+  width: 80%;
+}
+
+#header #profile span{
+  display: block;
+  padding-bottom: 5;
+}
+
+#toolbox{
+  text-align: center;
+  width: 40%;
+}
+
+#toolbox #add-section{
+  display: inline-block;
+  text-align: center;
+  width: 30%;
+}
+
+#toolbox #filter-section{
+  display: inline-block;
+  font-weight: bold;
+  width: 69%;  
+}

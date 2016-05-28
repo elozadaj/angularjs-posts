@@ -1,0 +1,10 @@
+#posts-list .post{
+  background-color: #01a9db;
+  border-radius: 15px;
+  border-style: solid;
+  cursor: pointer;
+  height: 50px;
+  margin: 30px 0px 30px 5px;
+  padding: 5px 10px;
+  width: 40%;
+}

@@ -1,0 +1,11 @@
+<div ng-controller="fullPostController as fpCtrl">
+  <div class="post">
+    <epam-post-preview post="fpCtrl.post_" current-user="fpCtrl.currentUser_">
+    </epam-post-preview>
+  </div>
+  <div class="comment-container" ng-repeat="c in fpCtrl.post_.comments">
+    <epam-comment comment="c" current-user="fpCtrl.currentUser_">      
+    </epam-comment>
+  </div>
+<span class="return" ng-click="fpCtrl.closeFullPost()">Return tu posts list</span>
+</div>

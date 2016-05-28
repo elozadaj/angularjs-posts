@@ -1,0 +1,22 @@
+.section-1{
+  color: white;
+  padding: 5px 0px;
+}
+
+.section-1 .action-buttons{
+  display: inline-block;
+  float: right;
+}
+
+.section-2{
+  color: #0404b4;
+  padding: 5px 0px;
+}
+
+.section-2 .author{
+  float: left;
+}
+
+.section-2 .comments{
+  float: right;
+}
