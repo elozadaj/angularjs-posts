@@ -8,7 +8,6 @@ var PostPreviewDirective = function(){
     restrict: 'E',
     scope:{
       post:'=',
-      currentUser:'=',
     },
     templateUrl: '/app/postPreview/epamPostPreviewView.html'
   };

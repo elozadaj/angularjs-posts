@@ -2,21 +2,13 @@
  * CommentController constructor.
  * @constructor
  * @param {!angular.scope} $scope Angular's scope object.
+ * @param {!Function} UserService Service which provides current user.
  */
-var CommentController = function($scope){
+var CommentController = function($scope, UserService) {
   /** @private */
   this.scope_ = $scope;
   /** @export */
-  this.comment_ = null;
+  this.comment_ = this.scope_.comment;
   /** @export */
-  this.currentUser_ = null;
-
-  this.scope_.$watch('comment',function(){
-  	this.comment_ = this.scope_.comment;
-  }.bind(this));
-
-  this.scope_.$watch('currentUser',function(){
-  	this.currentUser_ = this.scope_.currentUser;
-  }.bind(this));
-
+  this.currentUser_ = UserService.getCurrentUser();
 };

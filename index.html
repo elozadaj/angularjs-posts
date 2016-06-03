@@ -33,12 +33,14 @@
     <link rel="import" href="/app/addPost/epamAddPostView.html">
     <!-- services section -->
     <script src="/app/services/postService.js"></script>
+    <script src="/app/services/userService.js"></script>
     <!-- importing main section-->
     <script src="/app/mainController.js"></script>
     <script src="/app/app.js"></script>
     <title>Task 4</title>
   </head>
   <body ng-app="mainModule" ng-controller="mainController as mainCtrl">
+    <div id="wait" ng-show="mainCtrl.showWait"><img id="wait-img" src="img/wait.gif"/></div>
     <div id="header">
   	  <img id="epam-image" src="img/epam.png" alt="EPAM image"/>
   	  <div id="profile">
@@ -51,11 +53,11 @@
     <div id="toolbox" ng-show="mainCtrl.postListIsVisible">
       <div id="add-section"><button name="addPost" ng-click="mainCtrl.showAddPost()">Add</button></div>
       <div id="filter-section">
-	    <input type="text" ng-model="mainCtrl.filterField" ng-change="mainCtrl.filterPost(mainCtrl.filterField)" title="Filter"/>&nbsp;Filter
+	    <input type="text" id="filterFieldInput" ng-model="mainCtrl.filterField" ng-change="mainCtrl.filterPost(mainCtrl.filterField,$event)" title="Filter"/>&nbsp;Filter
       </div>
     </div>
-    <epam-list-of-posts posts="mainCtrl.posts" current-user="mainCtrl.currentUser" ng-show="mainCtrl.postListIsVisible"></epam-list-of-posts>
-    <epam-full-post post="mainCtrl.selectedPost" current-user="mainCtrl.currentUser" ng-show="mainCtrl.fullPostIsVisible"></epam-full-post>
+    <epam-list-of-posts posts="mainCtrl.posts" ng-if="mainCtrl.postListIsVisible"></epam-list-of-posts>
+    <epam-full-post post="mainCtrl.selectedPost" ng-if="mainCtrl.fullPostIsVisible"></epam-full-post>
     <epam-add-post current-user="mainCtrl.currentUser" ng-show="mainCtrl.addPostIsVisible"></epam-add-post>
   </body>
 </html>

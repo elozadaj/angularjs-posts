@@ -8,7 +8,6 @@ var ListOfPostsDirective = function(){
     restrict: 'E',
     scope:{
       posts: '=',
-      currentUser: '=',
       selectedPost: '=',
     },
     templateUrl: '/app/listOfPosts/epamListOfPostsView.html'

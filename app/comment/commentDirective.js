@@ -8,7 +8,6 @@ var CommentDirective = function(){
     restrict: 'E',
     scope:{
       comment:'=',
-      currentUser:'=',
     },
     templateUrl: '/app/comment/epamCommentView.html'
   };

@@ -3,27 +3,28 @@
  * @param {!angular.http} $http Angular's http object.
  * @constructor
  */
-var PostService = function(http){
+var PostService = function($http) {
   var this_ = this;
-  var http_ = http;
+  var http_ = $http;
 
   return{
   	getAllPosts: function(){
-      return http.get(this_.serverRoot+"/posts");
+      return http_.get(this_.serverRoot+"/posts");
   	},
     getAllComments: function(){
-      return http.get(this_.serverRoot+"/comments");
+      return http_.get(this_.serverRoot+"/comments");
     },
     getAllUsers: function(){
-      return http.get(this_.serverRoot+"/users");
+      return http_.get(this_.serverRoot+"/users");
+    },
+    addPost: function(post){
+      return http_.post(this_.serverRoot+"/posts",post);
     },
     removePost: function(postId){
-      console.log(this_.serverRoot+"/posts/"+postId);
-      return http.delete(this_.serverRoot+"/posts/"+postId);
+      return http_.delete(this_.serverRoot+"/posts/"+postId);
     },
     removeComment: function(commentId){
-      console.log(this_.serverRoot+"/comments/"+commentId);
-      return http.delete(this_.serverRoot+"/comments/"+commentId);
+      return http_.delete(this_.serverRoot+"/comments/"+commentId);
     },
   }
 };

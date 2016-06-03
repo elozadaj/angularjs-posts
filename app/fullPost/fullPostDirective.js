@@ -8,7 +8,6 @@ var FullPostDirective = function(){
     restrict: 'E',
     scope:{
       post:'=',
-      currentUser:'=',
     },
     templateUrl: '/app/fullPost/epamFullPostView.html'
   };

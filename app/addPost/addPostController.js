@@ -3,11 +3,9 @@
  * @constructor
  * @param {!angular.scope} $scope Angular's scope object.
  */
-var AddPostController = function($scope, addPostService){
+var AddPostController = function($scope){
   /** @private */
   this.scope_ = $scope;
-  /** @private */
-  this.addPostService_ = addPostService;
   /** @export */
   this.postTitle = null;
   /** @export */
@@ -18,15 +16,15 @@ var AddPostController = function($scope, addPostService){
  * Add new post
  */
 AddPostController.prototype.addPost = function(){
-  console.log("Agregando post de "+this.scope_.currentUser.name);
-  console.log("Title: "+this.postTitle);
-  console.log("Body: "+this.postBody);
-  console.log("userId: "+this.scope_.currentUser.id);
-  var newPost = [];
+  var newPost = {};
   newPost.title = this.postTitle;
   newPost.body = this.postBody;
   newPost.userId = this.scope_.currentUser.id;
-  this.addPostService_(newPost);
+
+  this.scope_.$emit("addPost",newPost);
+
+  this.postTitle = null;
+  this.postBody = null;
 };
 
 /**

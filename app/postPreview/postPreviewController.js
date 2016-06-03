@@ -3,21 +3,13 @@
  * @constructor
  * @param {!angular.scope} $scope Angular's scope object.
  */
-var PostPreviewController = function($scope){
+var PostPreviewController = function($scope, UserService) {
   /** @export */
   this.scope_ = $scope;
   /** @export */
-  this.post_ = null;
+  this.post_ = this.scope_.post;
   /** @export */
-  this.currentUser_ = null;
-
-  this.scope_.$watch('post',function(){
-  	this.post_ = this.scope_.post;
-  }.bind(this));
-
-  this.scope_.$watch('currentUser',function(){
-  	this.currentUser_ = this.scope_.currentUser;
-  }.bind(this));
+  this.currentUser_ = UserService.getCurrentUser();
 };
 
 /**
