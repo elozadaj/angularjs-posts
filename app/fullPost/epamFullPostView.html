@@ -1,9 +1,9 @@
 <div ng-controller="fullPostController as fpCtrl">
   <div class="post">
-    <epam-post-preview post="fpCtrl.post_">
+    <epam-post-preview post="fpCtrl.post">
     </epam-post-preview>
   </div>
-  <div class="comment-container" ng-repeat="c in fpCtrl.post_.comments">
+  <div class="comment-container" ng-repeat="c in fpCtrl.post.comments">
     <epam-comment comment="c">      
     </epam-comment>
   </div>

@@ -3,18 +3,17 @@
  * @constructor
  * @param {!angular.scope} $scope Angular's scope object.
  */
-var FullPostController = function($scope, UserService){
-  /** @export */
+var FullPostController = function($scope) {
+  /** @private {angular.scope} */
   this.scope_ = $scope;
-  /** @export */
-  this.post_ = this.scope_.post;
-  /** @export */
-  this.currentUser_ = UserService.getCurrentUser();
+
+  /** @export {Object} */
+  this.post = this.scope_.post;
 };
 
 /**
  * Close current view.
  */
-FullPostController.prototype.closeFullPost = function(){
+FullPostController.prototype.closeFullPost = function() {
   this.scope_.$emit('fullPostClosed');
 };

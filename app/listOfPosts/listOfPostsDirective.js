@@ -3,13 +3,13 @@
  * @constructor
  * @return {Object} New object of ListOfPostsDirective.
  */
-var ListOfPostsDirective = function(){
+var ListOfPostsDirective = function() {
   return {
     restrict: 'E',
-    scope:{
+    scope: {
       posts: '=',
       selectedPost: '=',
     },
-    templateUrl: '/app/listOfPosts/epamListOfPostsView.html'
+    templateUrl: '/app/listOfPosts/epamListOfPostsView.html',
   };
 };

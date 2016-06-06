@@ -3,12 +3,12 @@
  * @constructor
  * @return {Object} New object of FullPostDirective.
  */
-var FullPostDirective = function(){
+var FullPostDirective = function() {
   return {
     restrict: 'E',
-    scope:{
+    scope: {
       post:'=',
     },
-    templateUrl: '/app/fullPost/epamFullPostView.html'
+    templateUrl: '/app/fullPost/epamFullPostView.html',
   };
 };

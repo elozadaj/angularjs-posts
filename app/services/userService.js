@@ -3,13 +3,14 @@
  * @constructor
  */
 var UserService = function() {
+  /** @private {Object} Current user in the application*/
   this.currentUser_ = null;
 };
 
 /** 
  * Gets current user.
  * @return {Object} Returns current user.
- * @private 
+ * @export 
  */
 UserService.prototype.getCurrentUser = function() {
   return this.currentUser_;
@@ -18,7 +19,7 @@ UserService.prototype.getCurrentUser = function() {
 /** 
  * Sets current user.
  * @param {!Object} user User which will be set
- * @private 
+ * @export 
  */
 UserService.prototype.setCurrentUser = function(user) {
   this.currentUser_ = user;

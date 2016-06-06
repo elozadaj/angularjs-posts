@@ -9,7 +9,7 @@ module.service('userService', UserService);
 module.controller("mainController", ['$scope', '$http', '$filter', '$q', 'postService', 'userService', MainController]);
 
 // Defining listOfPosts components.
-module.controller("listOfPostsController", ['$scope', 'userService', ListOfPostsController]);
+module.controller("listOfPostsController", ['$scope', ListOfPostsController]);
 module.directive('epamListOfPosts', ListOfPostsDirective);
 
 // Defining postPreview components.
@@ -17,10 +17,10 @@ module.controller("postPreviewController", ['$scope', 'userService', PostPreview
 module.directive('epamPostPreview', PostPreviewDirective);
 
 // Defining fullPost components.
-module.controller("fullPostController", ['$scope', 'userService', FullPostController]);
+module.controller("fullPostController", ['$scope', FullPostController]);
 module.directive('epamFullPost', FullPostDirective);
 
-// Defining fullPost components.
+// Defining comment components.
 module.controller("commentController", ['$scope', 'userService', CommentController]);
 module.directive('epamComment', CommentDirective);
 

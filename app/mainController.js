@@ -5,42 +5,44 @@
  * @param {!angular.filter} $filter Angular's filter object.
  * @param {!angular.q} $q Angular's q object.
  * @param {!Function} PostService Service which contains post services.
+ * @param {!Function} UserService Service which contains current user.
  * @constructor
  */
 var MainController = function($scope, $http, $filter, $q, PostService, UserService) {
-  /** @private References angular's scope object*/
+  /** @private {angular.scope} */
   this.scope_ = $scope;
-  /** @private References angular's http object*/
+  /** @private {angular.http} */
   this.http_ = $http;
-  /** @private References angular's filter object*/
+  /** @private {angular.filter} */
   this.filter_ = $filter;
-  /** @private References angular's q object*/
+  /** @private {angular.q} */
   this.q_ = $q;
-  /** @private References PostService object*/
+  /** @private {Function} */
   this.PostService_ = PostService;
-  /** @private References UserService object*/
+  /** @private {Function} */
   this.UserService_ = UserService;
-  /** @private Array of users (authors) of posts */
-  this.users = null;
-  /** @export Array of all the posts */
+  /** @private {Array} */
+  this.users_ = null;
+  /** @private {Array} */
+  this.comments_ = null;
+  /** @private {Array} */
+  this.authorsNamesMap_ = null;
+
+  /** @export {Array} */
   this.posts = null;
-  /** @private Array of all the comments of all the posts */
-  this.comments = null;
-  /** @private Array with key = authorId and value = authorName */
-  this.authorsNamesMap = null;
-  /** @export */
+  /** @export {boolean} */
   this.postListIsVisible = false;
-  /** @export */
+  /** @export {boolean} */
   this.fullPostIsVisible = false;
-  /** @export */
+  /** @export {boolean} */
   this.addPostIsVisible = false;
-  /** @export */
+  /** @export {Object} */
   this.selectedPost = null;
-  /** @export */
+  /** @export {String} */
   this.filterField = "";
-  /** @export */
+  /** @export {Array} */
   this.originalPostList = null;
-  /** @export */
+  /** @export {boolean} */
   this.showWait = false;  
 
   /**
@@ -94,7 +96,7 @@ var MainController = function($scope, $http, $filter, $q, PostService, UserServi
     this.removePostFromView(post);
   }.bind(this));
 
-  // Loads JSON data from external server
+  // Loads JSON data from external server.
   this.loadInformationFromServer();
 };
 
@@ -103,6 +105,7 @@ var MainController = function($scope, $http, $filter, $q, PostService, UserServi
  * @private
  */
 MainController.prototype.loadInformationFromServer = function() {
+  this.showWait = true;
   var promises = [ ];
   // loads posts.
   promises.push(this.PostService_.getAllPosts());
@@ -113,24 +116,25 @@ MainController.prototype.loadInformationFromServer = function() {
 
   this.q_.all(promises).then(function(responses) {
     this.originalPostList = this.posts = responses[0].data;
-    this.comments = responses[1].data;
-    this.users = responses[2].data;
+    this.comments_ = responses[1].data;
+    this.users_ = responses[2].data;
     this.loadAdditionalInformation();
+    this.showWait = false;
   }.bind(this));
 };
 
 /**
- * Complement the information previously loaded
+ * Complement the information previously loaded.
  * @private
  */
 MainController.prototype.loadAdditionalInformation = function() {
   this.originalPostList = this.posts;
   // complementing data.
-  this.authorsNamesMap = this.getAuthorsNames(this.users);
-  this.addAuthorOfPosts(this.originalPostList, this.authorsNamesMap);
-  this.addCommentsToPosts(this.originalPostList, this.comments);
+  this.authorsNamesMap_ = this.getAuthorsNames(this.users_);
+  this.addAuthorOfPosts(this.originalPostList, this.authorsNamesMap_);
+  this.addCommentsToPosts(this.originalPostList, this.comments_);
   // loading data to header.
-  this.currentUser = this.getCurrentUser(this.users, "Bret");
+  this.currentUser = this.getCurrentUser(this.users_, "Bret");
   this.currentUser.numberOfPosts = this.loadNumberOfPosts(this.originalPostList, this.currentUser.id);
   this.UserService_.setCurrentUser(this.currentUser);
   this.showPostList();
@@ -164,7 +168,7 @@ MainController.prototype.showAddPost = function() {
 };
 
 /**
- * Hide all components from the view
+ * Hide all components from the view.
  */
 MainController.prototype.showNothing = function() {
   this.postListIsVisible = false;
@@ -226,14 +230,14 @@ MainController.prototype.addAuthorOfPosts = function(postsArray, namesMap) {
  */
 MainController.prototype.addCommentsToPosts = function(postsArray, commentsArray) {
   angular.forEach(postsArray, function(post, index) {
-    post.comments = this.filter_('filter')(commentsArray,{postId:post.id},true);
+    post.comments = this.filter_('filter')(commentsArray, {postId:post.id}, true);
   }, this);
 };
 
 /**
  * Returns the number of posts the user has published.
- * @param {Array} commentsArray Array of comments.
- * @param {number} userId Id of the user.
+ * @param {Array} postsArray Array of posts.
+ * @param {number} uId Id of the user.
  * @return {number} Number of posts the user has published.
  */
 MainController.prototype.loadNumberOfPosts = function(postsArray, uId) {
@@ -244,20 +248,19 @@ MainController.prototype.loadNumberOfPosts = function(postsArray, uId) {
  * Populates post list with elements that contains searchString.
  * @param {!string} searchString String written by the user in the filter field.
  */
-MainController.prototype.filterPost = function(searchString, event) {
+MainController.prototype.filterPost = function(searchString) {
   this.showNothing();
   this.posts = [ ];
   angular.forEach(this.originalPostList, function(oPost, index) {
-    this.showNothing();
     if(this.findInPost(oPost, searchString)) {
       this.posts.push(oPost);
     };
   }.bind(this));
 
-  // this is horrible, I know
-  // but I could not manage to update the view after the filterField value has changed
-  setTimeout(function(){
-    this.scope_.$apply(function(){
+  // this is horrible, I know,
+  // but I could not manage to update the view after the filterField value has changed.
+  setTimeout(function() {
+    this.scope_.$apply(function() {
       this.showPostList();
     }.bind(this));
     document.getElementById("filterFieldInput").focus();
@@ -266,7 +269,7 @@ MainController.prototype.filterPost = function(searchString, event) {
 };
 
 /**
- * Searchs through title's and author's posts for searchString
+ * Searchs through title's and author's posts for searchString.
  * @param {!Object} post Post which is evaluated.
  * @param {!string} searchString String written in the filter field.
  * @return {boolean} Whether the post contains searchString or not.
@@ -314,14 +317,14 @@ MainController.prototype.refreshViewInfo = function() {
  */
 MainController.prototype.addPostToView = function(post) {
   this.showWait = true;
-  // calling service to add the post
+  // calling service to add the post.
   this.addPost(post).then(function(response) {
-    // adding info to the post added
+    // adding info to the post added.
     post.id = response.data.id;
-    this.addAuthorOfPost(post, this.authorsNamesMap);
-    // adding the post to the list
+    this.addAuthorOfPost(post, this.authorsNamesMap_);
+    // adding the post to the list.
     this.addPostToList(post);
-    // updating the info displayed in the view
+    // updating the info displayed in the view.
     this.refreshViewInfo();
     this.showWait = false;
   }.bind(this));
@@ -333,24 +336,22 @@ MainController.prototype.addPostToView = function(post) {
  */
 MainController.prototype.removePostFromView = function(post) {
   this.showWait = true;
-  // deleting comments of the post
+  // deleting comments of the post.
   var removeCommentsPromise = this.removeComments(post.comments);
-
   this.q_.all(removeCommentsPromise).then(function() {
-    // deleting post after comments has been deleted
+    // deleting post after comments has been deleted.
     this.removePost(post.id).then(function() {
-      // deleting post from the view
+      // deleting post from the view.
       this.removePostFromList(post.id);
-      // updating the info displayed in the view
-      this.refreshViewInfo();      
+      // updating the info displayed in the view.
+      this.refreshViewInfo();
       this.showWait = false;
     }.bind(this),function() {
-      // an error ocurred while removing post
+      // an error ocurred while removing post.
       alert("Error while removing post");
       this.showWait = false;
     }.bind(this));
   }.bind(this));
-
 };
 
 /**
@@ -387,7 +388,7 @@ MainController.prototype.removeComment = function(commentId) {
  */
 MainController.prototype.removeComments = function(comments) {
   var promise = [ ];
-  angular.forEach(comments,function(comment, index) {
+  angular.forEach(comments, function(comment, index) {
     promise.push(this.removeComment(comment.id));
   }.bind(this));
   return promise;

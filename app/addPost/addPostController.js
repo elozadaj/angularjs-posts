@@ -3,33 +3,34 @@
  * @constructor
  * @param {!angular.scope} $scope Angular's scope object.
  */
-var AddPostController = function($scope){
-  /** @private */
+var AddPostController = function($scope) {
+  /** @private {angular.scope} */
   this.scope_ = $scope;
-  /** @export */
+  
+  /** @export {String} */
   this.postTitle = null;
-  /** @export */
+  /** @export {String} */
   this.postBody = null;
 };
 
 /**
- * Add new post
+ * Add new post.
  */
-AddPostController.prototype.addPost = function(){
-  var newPost = {};
+AddPostController.prototype.addPost = function() {
+  var newPost = { };
   newPost.title = this.postTitle;
   newPost.body = this.postBody;
   newPost.userId = this.scope_.currentUser.id;
 
-  this.scope_.$emit("addPost",newPost);
+  this.scope_.$emit("addPost", newPost);
 
   this.postTitle = null;
   this.postBody = null;
 };
 
 /**
- * Close addPost view
+ * Close addPost view.
  */
-AddPostController.prototype.closeAddPost = function(){
+AddPostController.prototype.closeAddPost = function() {
   this.scope_.$emit('addPostClosed');
 };

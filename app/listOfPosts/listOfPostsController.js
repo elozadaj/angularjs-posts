@@ -2,15 +2,13 @@
  * ListOfPostsController constructor.
  * @constructor
  * @param {!angular.scope} $scope Angular's scope.
- * @param {!Object} UserService Service that gets current user
  */
-var ListOfPostsController = function($scope, UserService) {
-  /** @export */
+var ListOfPostsController = function($scope) {
+  /** @private {angular.scope} */
   this.scope_ = $scope;
-  /** @export */
-  this.posts_ = this.scope_.posts;
-  /** @private */
-  this.currentUser_ = UserService.getCurrentUser();
+
+  /** @export {Object} */
+  this.posts = this.scope_.posts;
 }
 
 /**

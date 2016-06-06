@@ -3,12 +3,12 @@
  * @constructor
  * @return {Object} New object of CommentDirective.
  */
-var AddPostDirective = function(){
+var AddPostDirective = function() {
   return {
     restrict: 'E',
-    scope:{
+    scope: {
     	currentUser: "=",
     },
-    templateUrl: '/app/addPost/epamAddPostView.html'
+    templateUrl: '/app/addPost/epamAddPostView.html',
   };
 };

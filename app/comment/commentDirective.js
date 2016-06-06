@@ -3,12 +3,12 @@
  * @constructor
  * @return {Object} New object of CommentDirective.
  */
-var CommentDirective = function(){
+var CommentDirective = function() {
   return {
     restrict: 'E',
-    scope:{
+    scope: {
       comment:'=',
     },
-    templateUrl: '/app/comment/epamCommentView.html'
+    templateUrl: '/app/comment/epamCommentView.html',
   };
 };
