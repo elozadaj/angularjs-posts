@@ -1,0 +1,19 @@
+<md-dialog class="edit-post-dialog" aria-label="Edit post dialog">
+  <md-dialog-content>
+    <div class="header">Edit post</div><br/>
+    <form name="form">
+      <md-input-container class="field">
+        <label>Title</label>
+        <input type="text" name="postTitle" ng-model="epCtrl.post.title" required="true">
+      </md-input-container>
+      <md-input-container class="field">
+        <label>Body</label>
+        <textarea type="text" name="postBody" ng-model="epCtrl.post.body" required="true"></textarea>
+      </md-input-container>
+    </form>
+  </md-dialog-content>
+  <md-dialog-actions>
+    <md-button class="md-raised edit-post" ng-click="epCtrl.submit()" ng-disabled="form.$invalid">Submit changes</md-button>
+    <md-button class="md-accent" ng-click="epCtrl.cancel()">Cancel</md-button>
+  </md-dialog-actions>
+</md-dialog>

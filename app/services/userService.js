@@ -3,7 +3,7 @@
  * @constructor
  */
 var UserService = function() {
-  /** @private {Object} Current user in the application*/
+  /** @private {Object} */
   this.currentUser_ = null;
 };
 

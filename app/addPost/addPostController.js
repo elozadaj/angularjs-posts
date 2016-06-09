@@ -1,11 +1,17 @@
 /**
- * CommentController constructor.
+ * AddPostController constructor.
  * @constructor
  * @param {!angular.scope} $scope Angular's scope object.
+ * @param {!Function} userService Service which provides current user.
+ * @param {!angular.mdDialog} $mdDialog Angular Material dialog component.
  */
-var AddPostController = function($scope) {
+var AddPostController = function($scope, userService, $mdDialog) {
   /** @private {angular.scope} */
   this.scope_ = $scope;
+  /** @private {angular.mdDialog} */
+  this.mdDialog_ = $mdDialog;
+  /** @private {Object} */
+  this.currentUser_ = userService.getCurrentUser();
   
   /** @export {String} */
   this.postTitle = null;
@@ -20,17 +26,13 @@ AddPostController.prototype.addPost = function() {
   var newPost = { };
   newPost.title = this.postTitle;
   newPost.body = this.postBody;
-  newPost.userId = this.scope_.currentUser.id;
-
-  this.scope_.$emit("addPost", newPost);
-
-  this.postTitle = null;
-  this.postBody = null;
+  newPost.userId = this.currentUser_.id;
+  this.mdDialog_.hide(newPost);
 };
 
 /**
  * Close addPost view.
  */
 AddPostController.prototype.closeAddPost = function() {
-  this.scope_.$emit('addPostClosed');
+  this.mdDialog_.cancel();
 };

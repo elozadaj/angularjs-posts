@@ -1,15 +1,19 @@
-<div class="addPost" ng-controller="addPostController as apCtrl">
-  <br/>
-  <div class="header">Add post</div>
-  <div class="content">
-  	<br/>
-    <div class="title">Title&nbsp;<input type="text" name="postTitle" ng-model="apCtrl.postTitle"></div>
-    <br/>
-  	<div class="body">Body<textarea rows="5" cols="50" name="postBody" ng-model="apCtrl.postBody"></textarea></div>
-  </div>
-  <div class="footer">
-  	<br/>
-  	<button name="addPost" ng-click="apCtrl.addPost()">Add post</button>
-  	<button name="return" ng-click="apCtrl.closeAddPost()">Return to post list</button>
-  </div>
-</div>
+<md-dialog class="add-post-dialog" aria-label="Add post dialog">
+  <md-dialog-content>
+    <div class="header">Add new post</div><br/>
+    <form name="form">
+      <md-input-container class="field">
+        <label>Title</label>
+        <input type="text" name="postTitle" ng-model="apCtrl.postTitle" required="true">
+      </md-input-container>
+      <md-input-container class="field">
+        <label>Body</label>
+        <textarea type="text" name="postBody" ng-model="apCtrl.postBody" required="true"></textarea>
+      </md-input-container>
+    </form>
+  </md-dialog-content>
+  <md-dialog-actions>
+    <md-button class="md-raised add-new-post" ng-click="apCtrl.addPost()" ng-disabled="form.$invalid">Add post</md-button>
+    <md-button class="md-accent" ng-click="apCtrl.closeAddPost()">Cancel</md-button>
+  </md-dialog-actions>
+</md-dialog>

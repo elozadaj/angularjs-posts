@@ -1,0 +1,33 @@
+.edit-post-dialog{
+	text-align: center;
+}
+
+.edit-post-dialog .header{
+  background-color: olivedrab;
+  color: white;
+  display: block;
+  font-size: x-large;
+}
+
+.edit-post-dialog md-input-container{
+  margin: auto;
+  width: 95%;
+}
+
+.edit-post-dialog .field{
+  display: block;
+}
+
+md-dialog-actions .edit-post{
+  color: olivedrab !important;
+}
+
+md-input-container.field.md-default-theme:not(.md-input-invalid).md-input-focused label, 
+md-input-container.field:not(.md-input-invalid).md-input-focused label{
+  color: olivedrab !important;
+}
+
+md-input-container.field.md-default-theme:not(.md-input-invalid).md-input-focused .md-input,
+md-input-container.field:not(.md-input-invalid).md-input-focused .md-input{
+  border-color: olivedrab !important;
+}

@@ -2,7 +2,7 @@
   <div class="section-1">
     <span class="title">{{ppCtrl.post.title}}</span>
     <div class="action-buttons" ng-show="ppCtrl.post.authorId == ppCtrl.currentUser.id">
-      <span class="edit-button">Edit</span>
+      <span class="edit-button" ng-click="ppCtrl.editPost($event)">Edit</span>
       &nbsp;|&nbsp;
       <span class="delete-button" ng-click="ppCtrl.removePost($event)">Delete</span>
     </div>

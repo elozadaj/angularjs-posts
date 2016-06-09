@@ -6,9 +6,10 @@
  * @param {!angular.q} $q Angular's q object.
  * @param {!Function} PostService Service which contains post services.
  * @param {!Function} UserService Service which contains current user.
+ * @param {!Function} DialogService Service which contains dialog components.
  * @constructor
  */
-var MainController = function($scope, $http, $filter, $q, PostService, UserService) {
+var MainController = function($scope, $http, $filter, $q, PostService, UserService, DialogService) {
   /** @private {angular.scope} */
   this.scope_ = $scope;
   /** @private {angular.http} */
@@ -21,6 +22,8 @@ var MainController = function($scope, $http, $filter, $q, PostService, UserServi
   this.PostService_ = PostService;
   /** @private {Function} */
   this.UserService_ = UserService;
+  /** @private {angular.mdDialog} */
+  this.DialogService_ = DialogService;
   /** @private {Array} */
   this.users_ = null;
   /** @private {Array} */
@@ -67,23 +70,13 @@ var MainController = function($scope, $http, $filter, $q, PostService, UserServi
   }.bind(this));
 
   /**
-   * Listens to an specific event of childScopes and change view components.
+   * Edits an specific post from the list.
    * @param {!Object} event Angular's event object.
-   * @param {?Object} data Data sent from the event.
+   * @param {!Object} post Post which will be edited.
    * @private
    */
-  this.scope_.$on('addPostClosed', function(event, data) {
-    this.showPostList();
-  }.bind(this));
-
-  /**
-   * Adds an specific post to the list.
-   * @param {!Object} event Angular's event object.
-   * @param {!Object} post Post which will be added.
-   * @private
-   */
-  this.scope_.$on('addPost', function(event, post) {
-    this.addPostToView(post);
+  this.scope_.$on('editPost', function(event, post) {
+    this.showEditPostDialog(post);
   }.bind(this));
 
   /**
@@ -115,7 +108,8 @@ MainController.prototype.loadInformationFromServer = function() {
   promises.push(this.PostService_.getAllUsers());
 
   this.q_.all(promises).then(function(responses) {
-    this.originalPostList = this.posts = responses[0].data;
+    this.originalPostList = responses[0].data;
+    this.posts = responses[0].data;
     this.comments_ = responses[1].data;
     this.users_ = responses[2].data;
     this.loadAdditionalInformation();
@@ -128,7 +122,6 @@ MainController.prototype.loadInformationFromServer = function() {
  * @private
  */
 MainController.prototype.loadAdditionalInformation = function() {
-  this.originalPostList = this.posts;
   // complementing data.
   this.authorsNamesMap_ = this.getAuthorsNames(this.users_);
   this.addAuthorOfPosts(this.originalPostList, this.authorsNamesMap_);
@@ -156,15 +149,6 @@ MainController.prototype.showFullPost = function() {
   this.postListIsVisible = false;
   this.fullPostIsVisible = true;
   this.addPostIsVisible = false;
-};
-
-/**
- * Shows the specific post view and hide the full post list view.
- */
-MainController.prototype.showAddPost = function() {
-  this.postListIsVisible = false;
-  this.fullPostIsVisible = false;
-  this.addPostIsVisible = true;
 };
 
 /**
@@ -224,13 +208,22 @@ MainController.prototype.addAuthorOfPosts = function(postsArray, namesMap) {
 };
 
 /**
- * Adds all the comments related to a post.
+ * Adds all the comments related to the post.
+ * @param {!Object} post Post which the comments will be added to.
+ * @param {Array} commentsArray Array of all the comments.
+ */
+MainController.prototype.addCommentsToPost = function(post, commentsArray) {
+  post.comments = this.filter_('filter')(commentsArray, {postId: post.id}, true);
+};
+
+/**
+ * Adds all the comments related to an array of posts.
  * @param {Array} postsArray Array of all the posts.
  * @param {Array} commentsArray Array of all the comments.
  */
 MainController.prototype.addCommentsToPosts = function(postsArray, commentsArray) {
   angular.forEach(postsArray, function(post, index) {
-    post.comments = this.filter_('filter')(commentsArray, {postId:post.id}, true);
+    this.addCommentsToPost(post, commentsArray);
   }, this);
 };
 
@@ -256,7 +249,7 @@ MainController.prototype.filterPost = function(searchString) {
       this.posts.push(oPost);
     };
   }.bind(this));
-
+  
   // this is horrible, I know,
   // but I could not manage to update the view after the filterField value has changed.
   setTimeout(function() {
@@ -264,8 +257,8 @@ MainController.prototype.filterPost = function(searchString) {
       this.showPostList();
     }.bind(this));
     document.getElementById("filterFieldInput").focus();
-  }.bind(this),0);
-
+  }.bind(this),10);
+  
 };
 
 /**
@@ -308,11 +301,10 @@ MainController.prototype.searchInPostAuthor = function(post, searchString) {
 MainController.prototype.refreshViewInfo = function() {
   this.currentUser.numberOfPosts = this.loadNumberOfPosts(this.originalPostList, this.currentUser.id);
   this.filterPost(this.filterField);
-  this.showPostList();
 };
 
 /**
- * Adds a new post to the list.
+ * Adds a new post.
  * @param {!Object} post Post which will be added.
  */
 MainController.prototype.addPostToView = function(post) {
@@ -322,6 +314,7 @@ MainController.prototype.addPostToView = function(post) {
     // adding info to the post added.
     post.id = response.data.id;
     this.addAuthorOfPost(post, this.authorsNamesMap_);
+    this.addCommentsToPost(post, this.comments_)
     // adding the post to the list.
     this.addPostToList(post);
     // updating the info displayed in the view.
@@ -345,13 +338,61 @@ MainController.prototype.removePostFromView = function(post) {
       this.removePostFromList(post.id);
       // updating the info displayed in the view.
       this.refreshViewInfo();
-      this.showWait = false;
     }.bind(this),function() {
-      // an error ocurred while removing post.
-      alert("Error while removing post");
+      this.DialogService_.createErrorDialog();
+    }.bind(this)).finally(function() {
       this.showWait = false;
     }.bind(this));
   }.bind(this));
+};
+
+/**
+ * Shows the modal for adding a new post.
+ */
+MainController.prototype.showAddPostDialog = function() {
+  var addModalDialog = this.DialogService_.createAddDialog();
+
+  addModalDialog.then(
+    /**
+     * Handles 'hide' event from modal dialog
+     * @param {Object} newPost Post which will be created.
+     */
+    function(newPost) {
+      this.addPostToView(newPost);
+    }.bind(this)
+  );
+};
+
+/**
+ * Shows the modal for adding a new post.
+ */
+MainController.prototype.showEditPostDialog = function(post) {
+  var editModalDialog = this.DialogService_.createEditDialog(post);
+
+  editModalDialog.then(
+    /**
+     * Handles 'hide' event from modal dialog
+     * @param {Object} newPost Post which will be created.
+     */
+    function(editedPost) {
+      this.showWait = true;
+      this.PostService_.editPost(editedPost).then(function() {
+        // update view
+        for(var i=0; i<this.originalPostList.length; i++) {
+          if(this.originalPostList[i].id == editedPost.id) {
+            this.originalPostList[i] = editedPost;
+            break;
+          };
+        };
+        this.refreshViewInfo();
+      }.bind(this),function() {
+        this.DialogService_.createErrorDialog();
+      }.bind(this)).finally(function() {
+        this.showWait = false;
+      }.bind(this));
+    }.bind(this)
+  );
+
 };
 
 /**
@@ -361,6 +402,15 @@ MainController.prototype.removePostFromView = function(post) {
  */
 MainController.prototype.addPost = function(post) {
   return this.PostService_.addPost(post);
+}
+
+/**
+ * Invokes a service to edit a post.
+ * @param {!Object} post Post which will be edited.
+ * return {Object} Promise of the service.
+ */
+MainController.prototype.editPost = function(post) {
+  return this.PostService_.editPost(post);
 }
 
 /**

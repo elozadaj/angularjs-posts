@@ -1,29 +1,29 @@
 // Main module.
-var module = angular.module('mainModule', [ ]);
+var mainModule = angular.module('mainModule', ['ngMaterial']);
 
 // Defining services.
-module.service('postService', ['$http', PostService]);
-module.service('userService', UserService);
+mainModule.service('postService', ['$http', PostService]);
+mainModule.service('userService', UserService);
+mainModule.service('dialogService', ['$mdDialog', DialogService]);
 
 // Defining main controller.
-module.controller("mainController", ['$scope', '$http', '$filter', '$q', 'postService', 'userService', MainController]);
+mainModule.controller("mainController", ['$scope', '$http', '$filter', '$q', 'postService', 'userService', 'dialogService', MainController]);
 
 // Defining listOfPosts components.
-module.controller("listOfPostsController", ['$scope', ListOfPostsController]);
-module.directive('epamListOfPosts', ListOfPostsDirective);
+mainModule.controller("listOfPostsController", ['$scope', ListOfPostsController]);
+mainModule.directive('epamListOfPosts', ListOfPostsDirective);
 
 // Defining postPreview components.
-module.controller("postPreviewController", ['$scope', 'userService', PostPreviewController]);
-module.directive('epamPostPreview', PostPreviewDirective);
+mainModule.controller("postPreviewController", ['$scope', 'userService', PostPreviewController]);
+mainModule.directive('epamPostPreview', PostPreviewDirective);
 
 // Defining fullPost components.
-module.controller("fullPostController", ['$scope', FullPostController]);
-module.directive('epamFullPost', FullPostDirective);
+mainModule.controller("fullPostController", ['$scope', FullPostController]);
+mainModule.directive('epamFullPost', FullPostDirective);
 
 // Defining comment components.
-module.controller("commentController", ['$scope', 'userService', CommentController]);
-module.directive('epamComment', CommentDirective);
+mainModule.controller("commentController", ['$scope', 'userService', CommentController]);
+mainModule.directive('epamComment', CommentDirective);
 
 // Defining addPost components.
-module.controller("addPostController", ['$scope', AddPostController]);
-module.directive('epamAddPost', AddPostDirective);
+mainModule.controller("addPostController", ['$scope', 'userService', '$mdDialog', AddPostController]);

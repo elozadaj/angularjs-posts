@@ -4,13 +4,19 @@
     <meta charset="UTF-8">
     <!-- importing css files -->
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/stylesAddPost.css">
+    <link rel="stylesheet" href="/css/stylesComment.css">
+    <link rel="stylesheet" href="/css/stylesEditPost.css">
+    <link rel="stylesheet" href="/css/stylesFullPost.css">
     <link rel="stylesheet" href="/css/stylesListOfPosts.css">
     <link rel="stylesheet" href="/css/stylesPostPreview.css">
-    <link rel="stylesheet" href="/css/stylesFullPost.css">
-    <link rel="stylesheet" href="/css/stylesComment.css">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
     <!-- importing javascript files -->
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-    <!-- ** importing angularJs files ** -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
     <!-- listOfPostsController section -->
     <script src="/app/listOfPosts/listOfPostsController.js"></script>
     <script src="/app/listOfPosts/listOfPostsDirective.js"></script>
@@ -29,20 +35,25 @@
     <link rel="import" href="/app/comment/epamCommentView.html">
     <!-- addPost section -->
     <script src="/app/addPost/addPostController.js"></script>
-    <script src="/app/addPost/addPostDirective.js"></script>
     <link rel="import" href="/app/addPost/epamAddPostView.html">
+    <!-- editPost section -->
+    <script src="/app/editPost/editPostController.js"></script>
+    <link rel="import" href="/app/editPost/epamEditPostView.html">
     <!-- services section -->
     <script src="/app/services/postService.js"></script>
     <script src="/app/services/userService.js"></script>
+    <script src="/app/services/dialogService.js"></script>
     <!-- importing main section-->
     <script src="/app/mainController.js"></script>
     <script src="/app/app.js"></script>
     <title>Task 5</title>
   </head>
-  <body ng-app="mainModule" ng-controller="mainController as mainCtrl">
+  <body ng-app="mainModule" ng-controller="mainController as mainCtrl" ng-cloak>
     <div id="wait" ng-show="mainCtrl.showWait"><img id="wait-img" src="img/wait.gif"/></div>
     <div id="header">
-  	  <img id="epam-image" src="img/epam.png" alt="EPAM image"/>
+      <div class="img-container">
+        <img id="epam-image" src="img/epam.png" alt="EPAM image"/>
+      </div>  	  
   	  <div id="profile">
         <span>User Profile: {{mainCtrl.currentUser.name}}</span>
         <span>Email: {{mainCtrl.currentUser.email}}</span>
@@ -51,9 +62,16 @@
 	    </div>
     </div>
     <div id="toolbox" ng-show="mainCtrl.postListIsVisible">
-      <div id="add-section"><button name="addPost" ng-click="mainCtrl.showAddPost()">Add</button></div>
       <div id="filter-section">
-	    <input type="text" id="filterFieldInput" ng-model="mainCtrl.filterField" ng-change="mainCtrl.filterPost(mainCtrl.filterField,$event)" title="Filter"/>&nbsp;Filter
+        <md-input-container class="md-block search">
+          <md-icon md-svg-src="/img/search_black.svg" aria-label="search"></md-icon>
+          <input type="text" id="filterFieldInput" ng-model="mainCtrl.filterField" ng-change="mainCtrl.filterPost(mainCtrl.filterField,$event)" aria-label="search" title="Search"/>
+        </md-input-container>
+      </div>
+      <div id="add-section">
+        <md-button class="md-raised add-post" aria-label="Add post" ng-click="mainCtrl.showAddPostDialog()">
+          <md-icon md-svg-src="img/add_post_white.svg"></md-icon>
+        </md-button>
       </div>
     </div>
     <epam-list-of-posts posts="mainCtrl.posts" ng-if="mainCtrl.postListIsVisible"></epam-list-of-posts>
